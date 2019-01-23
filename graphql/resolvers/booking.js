@@ -30,7 +30,7 @@ module.exports = {
 
         const newBooking = new Booking({
             event: event,
-            user: '5c47172689144d845c7d2ff8' // temporary hardcoded _id
+            user:  req.userId // '5c47172689144d845c7d2ff8' // temporary hardcoded _id
         })
 
         const booking = await newBooking.save()

@@ -33,14 +33,14 @@ module.exports = {
             description: eventInput.description,
             price: +eventInput.price,
             date: new Date(eventInput.date),
-            creator: '5c47172689144d845c7d2ff8' // temporary hardcoded _id
+            creator: req.userId //'5c47172689144d845c7d2ff8' // temporary hardcoded _id
         })
 
         return event
             .save()
             .then((result) => {
                 createdEvent = transformEvent(result)
-                return User.findById('5c47172689144d845c7d2ff8')
+                return User.findById(req.userId)
             })
             .then(user => {
                 if (!user) {
