@@ -14,7 +14,9 @@ function transformEvent(event) {
     }
 }
 
-
+function transformDate(date){
+    return date.toISOString()
+}
 
 const singleUser = (userId) => () =>
     User.findById(userId)
@@ -79,8 +81,8 @@ module.exports = {
                     _id: b.id,
                     event: singleEvent(b.event),
                     user: singleUser(b.user),
-                    createdAt: b._doc.createdAt.toISOString(),
-                    updatedAt: b._doc.updatedAt.toISOString(),
+                    createdAt: transformDate( b._doc.createdAt), //.toISOString(),
+                    updatedAt: transformDate (b._doc.updatedAt), //.toISOString(),
                 }
 
             })
@@ -90,8 +92,6 @@ module.exports = {
     },
 
     createEvent: ({ eventInput }) => {
-
-        console.log("CREATe EVENT".args)
 
         let createdEvent
 
@@ -116,7 +116,6 @@ module.exports = {
                 }
                 user.createdEvents.push(event)
                 return user.save()
-
             })
             .then(() => createdEvent)
             .catch((err) => {
@@ -202,8 +201,6 @@ module.exports = {
             throw err
 
         }
-
-
     }
 
 }
