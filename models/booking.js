@@ -5,12 +5,15 @@ module.exports = mongoose.model('Booking', new Schema({
     event: {
         type: Schema.Types.ObjectId,
         ref: 'Event',
-        required: true
+        required: true,
     },
     user: {
         type: Schema.Types.ObjectId,
         ref: 'User',
         required: true
+    },
+    _id: {
+        type: Schema.Types.ObjectId
     }
 
 },

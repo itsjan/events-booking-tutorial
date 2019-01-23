@@ -5,7 +5,7 @@ const { date2String } = require('../../helpers/date')
 function transformEvent(event) {
     return {
         ...event._doc,
-        _id: event.id,
+        //_id: event.id,
         creator: singleUser(event.creator),
         date: date2String(event.date)
     }
@@ -14,7 +14,7 @@ function transformEvent(event) {
 function transformBooking(booking) {
     return {
         ...booking._doc,
-        _id: booking.id,
+        //_id: booking.id,
         event: singleEvent(booking.event),
         user: singleUser(booking.user),
         createdAt: date2String(booking._doc.createdAt),
@@ -25,7 +25,7 @@ function transformBooking(booking) {
 function transformUser(user) {
     return {
         ...user._doc,
-        _id: user.id,
+        //_id: user.id,
         password: null,
         createdEvents: events(user._doc.createdEvents)
     }   

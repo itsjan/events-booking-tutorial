@@ -13,7 +13,10 @@ const userSchema = new Schema({
     createdEvents: [ {
         type: Schema.Types.ObjectId,
         ref: 'Event'
-    }] 
+    }],
+    _id: {
+        type: Schema.Types.ObjectId
+    }
 })
 
 module.exports = mongoose.model('User', userSchema)
