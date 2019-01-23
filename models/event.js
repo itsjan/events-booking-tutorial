@@ -23,7 +23,8 @@ const eventSchema = new Schema({
         ref: 'User'
     },
     _id: {
-        type: Schema.Types.ObjectId
+        type: Schema.Types.ObjectId,
+        auto: true
     }
 })
 
