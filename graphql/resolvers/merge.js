@@ -31,8 +31,6 @@ function transformUser(user) {
     }   
 }
 
-
-
 const singleUser = (userId) => () =>
     User.findById(userId)
         .then(user => {
@@ -60,9 +58,6 @@ const events = eventIds => () => {
         .catch(err => { throw err })
 }
 
-//exports.user = singleUser
-//exports.event = singleEvent
-//exports.events = events
 exports.transformEvent = transformEvent
 exports.transformBooking = transformBooking
 exports.transformUser = transformUser
