@@ -11,7 +11,7 @@ module.exports = {
         {
             return {
                 userId : user._id,
-                token: jwt.sign( {userId: user.userId, email: user.email}, 
+                token: jwt.sign( {userId: user.id, email: user.email}, 
                     process.env.AUTH_CRYPTOKEY,
                     {expiresIn: '1h'}),
                 tokenExpiration: 1   

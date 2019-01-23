@@ -17,9 +17,16 @@ module.exports = {
             })
     },
 
-    createEvent: ({ eventInput }) => {
+    createEvent: ({ eventInput }, req) => {
+
+        if (!req.isAuth)
+        {
+            throw Error('AUTH ERROR')
+        }
 
         let createdEvent
+
+        console.log(req)
 
         const event = new Event({
             title: eventInput.title,
