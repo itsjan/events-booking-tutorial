@@ -2,6 +2,8 @@ const Event = require('../../models/event')
 const User = require('../../models/user')
 const Booking = require('../../models/booking')
 
+const { date2String} = require('../../helpers/date')
+
 var bcrypt = require('bcryptjs');           // Password crypt
 
 
@@ -10,13 +12,11 @@ function transformEvent(event) {
         ...event._doc,
         _id: event.id,
         creator: singleUser(event.creator),
-        date: new Date(event.date).toLocaleDateString()
+        date:  date2String(event.date)
     }
 }
 
-function transformDate(date){
-    return date.toISOString()
-}
+
 
 const singleUser = (userId) => () =>
     User.findById(userId)
@@ -81,8 +81,8 @@ module.exports = {
                     _id: b.id,
                     event: singleEvent(b.event),
                     user: singleUser(b.user),
-                    createdAt: transformDate( b._doc.createdAt), //.toISOString(),
-                    updatedAt: transformDate (b._doc.updatedAt), //.toISOString(),
+                    createdAt: date2String( b._doc.createdAt), //.toISOString(),
+                    updatedAt: date2String (b._doc.updatedAt), //.toISOString(),
                 }
 
             })
