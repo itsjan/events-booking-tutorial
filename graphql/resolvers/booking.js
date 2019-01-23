@@ -1,0 +1,63 @@
+const Booking = require('../../models/booking')
+const Event = require('../../models/event')
+const User = require('../../models/user')
+const {transformBooking, transformUser} = require ('./merge')
+
+module.exports = {
+
+    bookings: async () => {
+        try {
+            const bookings = await Booking.find()
+            return bookings.map(booking => {
+                return transformBooking(booking) 
+            })
+        } catch (err) {
+            throw err
+        }
+    },
+
+    bookEvent: async ({ eventId }) => {
+        console.log(`BOOK EVENT ${eventId} `)
+        const event = await Event.findOne({ _id: eventId })
+
+        const newBooking = new Booking({
+            event: event,
+            user: '5c47172689144d845c7d2ff8' // temporary hardcoded _id
+        })
+
+        const booking = await newBooking.save()
+        return transformBooking(booking)
+    },
+
+    cancelBooking: async ({ bookingId }) => {
+        console.log(`CANCEL BOOKING ${bookingId}`)
+        try {
+            const booking = 
+                await Booking.findOne({ _id: bookingId })
+                .populate('event')
+            
+            if ( !booking)
+                throw Error('Booking does not exist')
+
+            const creator = await User.findOne({ _id: booking.event.creator})
+
+            console.log('BOOKING',booking)
+
+            const event = {
+                ...booking.event._doc,
+                _id: booking.event._doc.id,
+                creator: transformUser(creator)
+            }
+
+            console.log('EVENT : ', event)
+            const result = await Booking.deleteOne({ _id: bookingId })
+
+            return event
+
+        } catch (err) {
+            throw err
+        }
+    }
+
+}
+
