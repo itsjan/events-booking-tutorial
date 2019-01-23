@@ -1,7 +1,0 @@
-{
-    "env":{
-        "MONGO_USER" : "events_app_TOGDW2745328",
-        "MONGO_PASS" : "JxYfvCNUjHx5r4yAsljfhLJSHFkU",
-        "MONGO_DB"   : "events-DEV"
-    }
-}
