@@ -68,8 +68,8 @@ class Auth extends Component {
                     <input type="password" id="password" ref={this.passwordInput} />
                 </div>
                 <div className="form-actions">
-                    <button type="submit">Login</button>
-                    <button type="button">Signup</button>
+                    <button type="submit">Signup</button>
+                    <button type="button">Login</button>
                 </div>
             </form>
         )
