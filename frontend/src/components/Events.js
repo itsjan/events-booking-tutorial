@@ -14,7 +14,6 @@ class Events extends Component {
         return (
             <div>Events</div>
         )
-
     }
 }
 
