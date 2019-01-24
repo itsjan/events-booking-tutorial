@@ -9,11 +9,6 @@ const auth = require('./middleware/auth')
 
 // Configure Middleware
 
-// app.use((req,res,next) => {
-//     console.log("GOT REQUEST" , req)
-//     next()
-// })
-app.use(bodyParser.json())
 app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*')
     res.setHeader('Access-Control-Allow-Methods', 'POST,GET,OPTIONS')
@@ -23,6 +18,7 @@ app.use((req, res, next) => {
     }
     next()
 })
+app.use(bodyParser.json())
 app.use(auth)
 app.use('/graphql', graphqlHttp({
     schema: graphql_schema,
