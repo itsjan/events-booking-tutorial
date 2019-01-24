@@ -6,24 +6,26 @@ import AuthContext from '../../context/auth-context'
 const mainNavigation = (props) => (
     <AuthContext.Consumer>
         {(context) => {
-            console.log('token' , context.token)
+            console.log('token', context.token)
             return (
                 <header className="main-navigation">
                     <div className="main-navigation__logo">
                         <h1>Eventum</h1>
                     </div>
-                    <nav className="main-navigation__nav">
+                    <nav className="main-navigation__items">
                         <ul>
 
-                            {!context.token &&
-                                <li><NavLink to='/auth'>Login</NavLink></li>
-                            }
+
                             <li><NavLink to='/events'>Events</NavLink></li>
                             {context.token &&
-                                <li><NavLink to='/bookings'>Bookings</NavLink></li>
+                                <React.Fragment>
+                                    <li><NavLink to='/bookings'>Bookings</NavLink></li>
+                                    <li><button onClick={context.logout}>Log Out</button></li>
+                                </React.Fragment>
+
                             }
-                            {
-                                context.token && <div>Logged in</div>
+                            {!context.token &&
+                                <li><NavLink to='/auth'>Login</NavLink></li>
                             }
                         </ul>
                     </nav>
