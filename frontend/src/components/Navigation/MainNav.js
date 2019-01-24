@@ -12,7 +12,7 @@ const mainNavigation = (props) => (
                     <div className="main-navigation__logo">
                         <h1>Eventum</h1>
                     </div>
-                    <nav className="main-navigation__nav">
+                    <nav className="main-navigation__items">
                         <ul>
 
                             {!context.token &&
