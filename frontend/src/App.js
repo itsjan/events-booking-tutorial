@@ -6,7 +6,8 @@ import Bookings from './components/Bookings'
 import MainNav from './components/Navigation/MainNav'
 import AuthContext from './context/auth-context'
 
-import './App.css';
+import './App.css'
+import './index.css'
 
 class App extends Component {
 
@@ -15,7 +16,7 @@ class App extends Component {
     userId: null
   }
 
-  login = (token, userId, tokenExpiration) => {
+  login = (token, tokenExpiration, userId) => {
     this.setState({ token, userId })
   }
   logout = () => {

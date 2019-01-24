@@ -86,18 +86,11 @@ class AuthPage extends Component {
                 }
                 if (responseData.data.login.token)
                 {
-                    this.context.login( 
-                        responseData.data.login.userId,
+                    this.context.login(                      
                         responseData.data.login.token,
-                        responseData.data.login.tokenExpiration
-
-                         )
+                        responseData.data.login.tokenExpiration,
+                        responseData.data.login.userId)
                     
-                    // this.contextType.AuthContext.login(
-                    //     responseData.data.login.token, 
-                    //     responseData.data.login.tokenExpiration,
-                    //     responseData.data.login.userId
-                    //     )
                     console.log("TOKEN", responseData.data.login.token )
                 }
                 else if (responseData.data.createUser)
