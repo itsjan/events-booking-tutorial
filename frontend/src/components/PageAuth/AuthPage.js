@@ -1,11 +1,13 @@
 import React, { Component } from 'react'
-import './Auth.css'
+import './AuthPage.css'
+import AuthContext from '../../context/auth-context'
 
-class Auth extends Component {
-
+class AuthPage extends Component {
     state = {
         isLogin : true
     }
+
+    static contextType = AuthContext
 
     constructor(props) {
         super(props)
@@ -76,14 +78,26 @@ class Auth extends Component {
                 return res.json()
             })
             .then(responseData => {
-                console.log(responseData)
+                console.log("RESPONSEDATE", responseData)
                 if ( responseData.errors)
                 {
                     console.log("SERVER REPORTED AN ERROR", responseData.errors)
                     alert(responseData.errors[0].message)
                 }
-                if (responseData.data.login)
+                if (responseData.data.login.token)
                 {
+                    this.context.login( 
+                        responseData.data.login.userId,
+                        responseData.data.login.token,
+                        responseData.data.login.tokenExpiration
+
+                         )
+                    
+                    // this.contextType.AuthContext.login(
+                    //     responseData.data.login.token, 
+                    //     responseData.data.login.tokenExpiration,
+                    //     responseData.data.login.userId
+                    //     )
                     console.log("TOKEN", responseData.data.login.token )
                 }
                 else if (responseData.data.createUser)
@@ -117,4 +131,4 @@ class Auth extends Component {
     }
 }
 
-export default Auth
+export default AuthPage
