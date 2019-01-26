@@ -3,19 +3,25 @@ import Backdrop from '../Backdrop/Backdrop'
 import Modal from '../Modal/Modal'
 import Spinner from '../Spinner/Spinner'
 import EventsList from './EventsList/EventsList'
-
 import './Events.css'
 import AuthContext from '../../context/auth-context'
-
-
 
 class Events extends Component {
     static contextType = AuthContext
 
     state = {
-        showModal: false,
+        isCreatingNewEvent: false,
+        isViewingEvent: null,
         events: [],
         isLoading: false,
+    }
+
+    constructor(props) {
+        super(props)
+        this.eventTitleInput = React.createRef()
+        this.eventDescriptionInput = React.createRef()
+        this.eventPriceInput = React.createRef()
+        this.eventDateInput = React.createRef()
     }
 
     componentDidMount() {
@@ -61,7 +67,6 @@ class Events extends Component {
                 return res.json()
             })
             .then(responseData => {
-                console.log("RESPONSEDATA", responseData)
                 this.setState({
                     events: responseData.data.events
                 })
@@ -78,19 +83,35 @@ class Events extends Component {
 
     }
 
-    constructor(props) {
-        super(props)
-        this.eventTitleInput = React.createRef()
-        this.eventDescriptionInput = React.createRef()
-        this.eventPriceInput = React.createRef()
-        this.eventDateInput = React.createRef()
-    }
 
-    toggleModal = () => {
+
+    toggleIsCreatingNewEvent = () => {
         this.setState({
-            showModal: !this.state.showModal
+            isCreatingNewEvent: !this.state.isCreatingNewEvent
         })
     }
+
+    viewEvent = (eventId) => {
+        console.log("VIEV EVENT ", eventId)
+        const isViewingEvent = this.state.events.find(event=> event._id === eventId)
+        this.setState({
+            isViewingEvent
+        })
+
+    }
+
+    cancelViewEvent = () => {
+        this.setState({
+            isViewingEvent: null
+        })
+    }
+
+    bookEvent = () => {
+        console.log("BOOK EVENT" , this.state.isViewingEvent._id)
+        this.cancelViewEvent()
+
+    }
+
 
     createEvent = () => {
 
@@ -134,8 +155,6 @@ class Events extends Component {
             fetch('http://localhost:8000/graphql',
                 {
                     method: 'POST',
-                    // withCredentials: true,
-                    // credentials: 'include',
                     body: JSON.stringify(createEventRequest),
                     headers: {
                         'Authorization': bearer,
@@ -149,7 +168,7 @@ class Events extends Component {
                     return res.json()
                 })
                 .then(responseData => {
-                    this.toggleModal()
+                    this.toggleIsCreatingNewEvent()
                     this.fetchEvents()
                     console.log("RESPONSEDATA", responseData)
                     if (responseData.errors) {
@@ -160,28 +179,26 @@ class Events extends Component {
                 .catch(err => {
                     console.log(err)
                 })
-
-
         }
         else {
             console.log("Missing inputs")
         }
-
     }
 
     render(props) {
-
         return (
             <React.Fragment>
-                {(this.state.showModal
-                    || this.state.isLoading) &&
+                {(this.state.isCreatingNewEvent
+                    || this.state.isLoading
+                    || this.state.isViewingEvent )&&
                     <Backdrop />}
 
-                {this.state.showModal &&
-                    <Modal title="Modal Title"
+                {this.state.isCreatingNewEvent &&
+                    <Modal title="Create a New Event"
                         canCancel="true"
-                        onCancel={this.toggleModal}
+                        onCancel={this.toggleIsCreatingNewEvent}
                         canConfirm="true"
+                        confirmButtonText="Create Event"
                         onConfirm={this.createEvent}>
                         <form>
                             <div className="form-control">
@@ -203,11 +220,24 @@ class Events extends Component {
                         </form>
                     </Modal>
                 }
+
+                {this.state.isViewingEvent &&
+                    <Modal title={this.state.isViewingEvent.title}
+                        canCancel="true"
+                        onCancel={this.cancelViewEvent}
+                        canConfirm={true && this.context.token}
+                        confirmButtonText="Book Event"
+                        onConfirm={this.bookEvent}>
+                        <div>{this.state.isViewingEvent.description}</div>
+                        <div>${this.state.isViewingEvent.price}</div>
+                    </Modal>
+                }
+
                 <div className="events-control">
                     <h1>Events</h1>
                     {this.state.isLoading && <Spinner />}
-                    {this.context.token && <button className="btn" onClick={this.toggleModal}>Create Event</button>}
-                    <EventsList events={this.state.events} />
+                    {this.context.token && <button className="btn" onClick={this.toggleIsCreatingNewEvent}>Create Event</button>}
+                    <EventsList events={this.state.events} onViewEvent={this.viewEvent}  />
 
                 </div>
             </React.Fragment>
