@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import Backdrop from '../Backdrop/Backdrop'
 import Modal from '../Modal/Modal'
 import Spinner from '../Spinner/Spinner'
+import EventsList from './EventsList/EventsList'
 
 import './Events.css'
 import AuthContext from '../../context/auth-context'
@@ -13,7 +14,7 @@ class Events extends Component {
 
     state = {
         showModal: false,
-        events: [{ _id: 'ID', title: 'LOADING EVENTS' }],
+        events: [],
         isLoading: false,
     }
 
@@ -170,11 +171,6 @@ class Events extends Component {
 
     render(props) {
 
-        const eventList = this.state.events.map((event) => {
-            return <li key={event._id} className="events__list-item">{event.title}</li>
-        })
-
-        console.log("EVENTLIST ", eventList)
         return (
             <React.Fragment>
                 {(this.state.showModal
@@ -208,13 +204,10 @@ class Events extends Component {
                     </Modal>
                 }
                 <div className="events-control">
-                    {this.state.isLoading && <Spinner />}
                     <h1>Events</h1>
+                    {this.state.isLoading && <Spinner />}
                     {this.context.token && <button className="btn" onClick={this.toggleModal}>Create Event</button>}
-
-                    <ul className="events__list">
-                        {eventList}
-                    </ul>
+                    <EventsList events={this.state.events} />
 
                 </div>
             </React.Fragment>
