@@ -1,8 +1,11 @@
 import React, { Component } from 'react'
 import Backdrop from '../Backdrop/Backdrop'
 import Modal from '../Modal/Modal'
+import Spinner from '../Spinner/Spinner'
+
 import './Events.css'
 import AuthContext from '../../context/auth-context'
+
 
 
 class Events extends Component {
@@ -10,7 +13,8 @@ class Events extends Component {
 
     state = {
         showModal: false,
-        events: [{ _id: 'ID', title: 'LOADING EVENTS' }]
+        events: [{ _id: 'ID', title: 'LOADING EVENTS' }],
+        isLoading: false,
     }
 
     componentDidMount() {
@@ -19,6 +23,7 @@ class Events extends Component {
 
     fetchEvents() {
 
+        this.setState({ isLoading: true })
         const request = {
             query: `
             query {
@@ -47,6 +52,8 @@ class Events extends Component {
                     'Content-Type': 'application/json',
                 }
             }).then(res => {
+                this.setState({ isLoading: false })
+
                 if (res.status !== 200 && res.status !== 201) {
                     throw new Error('Failed')
                 }
@@ -64,6 +71,7 @@ class Events extends Component {
                 }
             })
             .catch(err => {
+                this.setState({ isLoading: false })
                 console.log(err)
             })
 
@@ -169,8 +177,10 @@ class Events extends Component {
         console.log("EVENTLIST ", eventList)
         return (
             <React.Fragment>
-                {this.state.showModal &&
+                {(this.state.showModal
+                    || this.state.isLoading) &&
                     <Backdrop />}
+
                 {this.state.showModal &&
                     <Modal title="Modal Title"
                         canCancel="true"
@@ -198,6 +208,7 @@ class Events extends Component {
                     </Modal>
                 }
                 <div className="events-control">
+                    {this.state.isLoading && <Spinner />}
                     <h1>Events</h1>
                     {this.context.token && <button className="btn" onClick={this.toggleModal}>Create Event</button>}
 
