@@ -93,7 +93,7 @@ class Events extends Component {
 
     viewEvent = (eventId) => {
         console.log("VIEV EVENT ", eventId)
-        const isViewingEvent = this.state.events.find(event=> event._id === eventId)
+        const isViewingEvent = this.state.events.find(event => event._id === eventId)
         this.setState({
             isViewingEvent
         })
@@ -107,7 +107,7 @@ class Events extends Component {
     }
 
     bookEvent = () => {
-        console.log("BOOK EVENT" , this.state.isViewingEvent._id)
+        console.log("BOOK EVENT", this.state.isViewingEvent._id)
         this.cancelViewEvent()
 
     }
@@ -167,13 +167,29 @@ class Events extends Component {
 
                     return res.json()
                 })
-                .then(responseData => {
-                    this.toggleIsCreatingNewEvent()
-                    this.fetchEvents()
-                    console.log("RESPONSEDATA", responseData)
-                    if (responseData.errors) {
-                        console.log("SERVER REPORTED AN ERROR", responseData.errors)
-                        alert(responseData.errors[0].message)
+                .then(resData => {
+                    if (resData.errors) {
+                        console.log("SERVER REPORTED AN ERROR", resData.errors)
+                        alert(resData.errors[0].message)
+                    }
+                    else {
+                        this.toggleIsCreatingNewEvent()
+                        this.setState(prevState => {
+                            const updatedEvents = [...prevState.events];
+                            updatedEvents.push({
+                                _id: resData.data.createEvent._id,
+                                title: resData.data.createEvent.title,
+                                description: resData.data.createEvent.description,
+                                date: resData.data.createEvent.date,
+                                price: resData.data.createEvent.price,
+                                creator: {
+                                    _id: this.context.userId
+                                }
+                            });
+                            return { events: updatedEvents };
+                        });
+
+
                     }
                 })
                 .catch(err => {
@@ -190,7 +206,7 @@ class Events extends Component {
             <React.Fragment>
                 {(this.state.isCreatingNewEvent
                     || this.state.isLoading
-                    || this.state.isViewingEvent )&&
+                    || this.state.isViewingEvent) &&
                     <Backdrop />}
 
                 {this.state.isCreatingNewEvent &&
@@ -237,7 +253,7 @@ class Events extends Component {
                     <h1>Events</h1>
                     {this.state.isLoading && <Spinner />}
                     {this.context.token && <button className="btn" onClick={this.toggleIsCreatingNewEvent}>Create Event</button>}
-                    <EventsList events={this.state.events} onViewEvent={this.viewEvent}  />
+                    <EventsList events={this.state.events} onViewEvent={this.viewEvent} />
 
                 </div>
             </React.Fragment>
