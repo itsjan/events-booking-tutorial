@@ -110,8 +110,10 @@ class Events extends Component {
         console.log("BOOK EVENT", this.state.isViewingEvent._id)
         this.cancelViewEvent()
 
+        if ( !this.context.token ) return
+
         const bookEventRequest = {query: `
-        mutation {  bookEvent (eventId : "${this.state.isViewingEvent._id}" )  {_id}}
+        mutation {  bookEvent (eventId : "${this.state.isViewingEvent._id}" )  {_id createdAt updatedAt}}
         `}
 
         //create event
@@ -127,7 +129,9 @@ class Events extends Component {
                 }
             }).then(res => {
                 if (res.status !== 200 && res.status !== 201) {
+                    console.log(res.json())
                     throw new Error('Failed')
+                    
                 }
                 return res.json()
             })

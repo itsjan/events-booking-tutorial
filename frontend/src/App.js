@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { BrowserRouter, Route, Redirect, Switch } from 'react-router-dom'
 import AuthPage from './components/PageAuth/AuthPage'
 import Events from './components/PageEvents/Events'
-import Bookings from './components/Bookings'
+import BookingsPage from './components/PageBookings/BookingsPage'
 import MainNav from './components/Navigation/MainNav'
 import AuthContext from './context/auth-context'
 
@@ -41,7 +41,7 @@ class App extends Component {
                 {this.state.token && <Redirect from='/auth' to='/events' />}
                 {!this.state.token && <Route path='/auth' component={AuthPage} />}
                 <Route path='/events' component={Events} />
-                {this.state.token && <Route path='/bookings' component={Bookings} />}
+                {this.state.token && <Route path='/bookings' component={BookingsPage} />}
               </Switch>
             </main>
           </AuthContext.Provider>
