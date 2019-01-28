@@ -91,7 +91,7 @@ class Events extends Component {
         })
     }
 
-    viewEvent = (eventId) => { 
+    viewEvent = (eventId) => {
         const isViewingEvent = this.state.events.find(event => event._id === eventId)
         this.setState({
             isViewingEvent
@@ -106,9 +106,40 @@ class Events extends Component {
     }
 
     bookEvent = () => {
+        // bookEvent(eventId: ID!): Booking!
         console.log("BOOK EVENT", this.state.isViewingEvent._id)
         this.cancelViewEvent()
 
+        const bookEventRequest = {query: `
+        mutation {  bookEvent (eventId : "${this.state.isViewingEvent._id}" )  {_id}}
+        `}
+
+        //create event
+        var bearer = 'Bearer ' + this.context.token;
+
+        fetch('http://localhost:8000/graphql',
+            {
+                method: 'POST',
+                body: JSON.stringify(bookEventRequest),
+                headers: {
+                    'Authorization': bearer,
+                    'Content-Type': 'application/json',
+                }
+            }).then(res => {
+                if (res.status !== 200 && res.status !== 201) {
+                    throw new Error('Failed')
+                }
+                return res.json()
+            })
+            .then(resData => {
+                if (resData.errors) {
+                    console.log("SERVER REPORTED AN ERROR", resData.errors)
+                    alert(resData.errors[0].message)
+                }
+            })
+            .catch(err => {
+                console.log(err)
+            })
     }
 
 
