@@ -2,6 +2,18 @@
     margin: 1rem 0;
     padding: 1rem;
     border: 1px solid  #5101d1;
+    border-radius: 10px;
     display: flex;
     justify-content: space-between;
+  }
+
+  .events__list-item h1 {
+    margin: 0;
+    font-size: 1.5rem;
+    color: #5101d1;
+  }
+
+  .events__list-item_price {
+    font-size: 0.8rem;
+    color: gray;
   }

@@ -91,8 +91,7 @@ class Events extends Component {
         })
     }
 
-    viewEvent = (eventId) => {
-        console.log("VIEV EVENT ", eventId)
+    viewEvent = (eventId) => { 
         const isViewingEvent = this.state.events.find(event => event._id === eventId)
         this.setState({
             isViewingEvent
@@ -143,8 +142,6 @@ class Events extends Component {
               `
         }
 
-        console.log(createEventRequest)
-
         if (eventTitle.trim() !== ''
             && eventDescription.trim() !== ''
             && eventDate.trim() !== '') {
@@ -183,7 +180,8 @@ class Events extends Component {
                                 date: resData.data.createEvent.date,
                                 price: resData.data.createEvent.price,
                                 creator: {
-                                    _id: this.context.userId
+                                    _id: this.context.userId,
+                                    email: resData.data.createEvent.creator.email,
                                 }
                             });
                             return { events: updatedEvents };
@@ -238,7 +236,8 @@ class Events extends Component {
                 }
 
                 {this.state.isViewingEvent &&
-                    <Modal title={this.state.isViewingEvent.title}
+                    <Modal title={this.state.isViewingEvent.title + ' - ' +
+                        new Date(this.state.isViewingEvent.date).toLocaleDateString()}
                         canCancel="true"
                         onCancel={this.cancelViewEvent}
                         canConfirm={true && this.context.token}
