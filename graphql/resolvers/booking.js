@@ -56,7 +56,7 @@ module.exports = {
 
             console.log('BOOKING',booking)
 
-            const event = { //TODO
+            const event = {
                 ...booking.event._doc,
                 _id: booking.event._doc._id,
                 creator: transformUser(creator)
