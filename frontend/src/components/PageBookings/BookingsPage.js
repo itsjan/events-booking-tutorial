@@ -58,9 +58,10 @@ class BookingsPage extends Component {
                     'Content-Type': 'application/json',
                 }
             }).then(res => {
+                console.log("THIS IS THE RESPONSE -> ", res)
                 if (res.status !== 200 && res.status !== 201) {
                     console.log(res.json())
-                    throw new Error('Failed')
+                    throw new Error('Failed ' + res.status)
 
                 }
                 return res.json()
@@ -70,17 +71,21 @@ class BookingsPage extends Component {
                     console.log("SERVER REPORTED AN ERROR", resData.errors)
                     alert(resData.errors[0].message)
                 }
+
+                this.setState({
+                    bookings: this.state.bookings
+                        .filter(booking => booking._id !== this.state.isCancelingBooking._id)
+                })
+        
+                this.cancelCancelBooking()
+
+                
             })
             .catch(err => {
                 console.log(err)
             })
 
-        this.setState({
-            bookings: this.state.bookings
-                .filter(booking => booking._id !== this.state.isCancelingBooking._id)
-        })
-
-        this.cancelCancelBooking()
+        
 
     }
 

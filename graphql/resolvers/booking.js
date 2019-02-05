@@ -58,7 +58,7 @@ module.exports = {
 
             const event = { //TODO
                 ...booking.event._doc,
-                _id: booking.event._doc.id,
+                _id: booking.event._doc._id,
                 creator: transformUser(creator)
             }
 
@@ -68,6 +68,7 @@ module.exports = {
             return event
 
         } catch (err) {
+            console.log("ERROR IN CANCEL BOOKING -->", err)
             throw err
         }
     }
