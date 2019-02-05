@@ -46,7 +46,7 @@ module.exports = {
         console.log(`CANCEL BOOKING ${bookingId}`)
         try {
             const booking = 
-                await Booking.findOne({ _id: bookingId })
+                await Booking.findOne({ _id: bookingId, user: req.userId})
                 .populate('event')
             
             if ( !booking)
