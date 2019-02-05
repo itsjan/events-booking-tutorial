@@ -8,13 +8,16 @@ class eventsItem extends React.Component {
     render() {
 
         const booking = this.props.booking
+        
        
         return (
             <li key={booking._id} className="bookings__list-item">
                 <div>
                     <h1>{ booking.event.title }</h1>
                     <div className="events__list-item_price">${booking.event.price} - {new Date(booking.event.date).toLocaleDateString()}</div>
-
+                </div>
+                <div>
+                    <button className="btn" onClick={this.props.onCancelBooking}>Cancel Booking</button>
                 </div>
 
             </li>)

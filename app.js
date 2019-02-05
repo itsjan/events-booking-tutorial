@@ -27,8 +27,9 @@ app.use('/graphql', graphqlHttp({
 }))
 
 // Connect to database
+console.log(process.env.MONGO_USER)
 mongoose.connect(`mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASS}@cluster0-huh2k.gcp.mongodb.net/${process.env.MONGO_DB}?retryWrites=true`,
-    { useNewUrlParser: true })
+    { /*useNewUrlParser: true*/ })
     .then(() => {
         console.log('[     Connected to MongoDB     ]')
         app.listen(8000)
