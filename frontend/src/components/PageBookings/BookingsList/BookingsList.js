@@ -2,8 +2,6 @@ import React from 'react'
 import './BookingsList.css'
 import Booking from '../Booking/Booking'
 
-
-
 const bookingsList = (props) => {
     
     console.table(props.bookings)

@@ -6,7 +6,6 @@ import AuthContext from '../../context/auth-context'
 import BookingsList from './BookingsList/BookingsList'
 import './BookingsPage.css'
 
-
 class BookingsPage extends Component {
 
     static contextType = AuthContext
@@ -19,7 +18,6 @@ class BookingsPage extends Component {
             isLoading: false,
         }
     }
-
 
     startCancelBooking = (bookingId) => {
         const isCancelingBooking = this.state.bookings.find(booking => booking._id === bookingId)
@@ -38,13 +36,11 @@ class BookingsPage extends Component {
     confirmCancelBooking = () => {
         console.log("Confirm booking cancellation")
 
-
         if (!this.context.token) return
 
         const cancelEventBookingRequest = {
             query: `
             mutation { cancelBooking (  bookingId: "${this.state.isCancelingBooking._id}" ){ _id, title, description} }
-
         `}
 
         var bearer = 'Bearer ' + this.context.token;
@@ -62,7 +58,6 @@ class BookingsPage extends Component {
                 if (res.status !== 200 && res.status !== 201) {
                     console.log(res.json())
                     throw new Error('Failed ' + res.status)
-
                 }
                 return res.json()
             })
@@ -78,17 +73,12 @@ class BookingsPage extends Component {
                 })
         
                 this.cancelCancelBooking()
-
-                
+               
             })
             .catch(err => {
                 console.log(err)
             })
-
-        
-
     }
-
 
     componentDidMount() {
         this.fetchEventBookings()
@@ -163,8 +153,6 @@ class BookingsPage extends Component {
                     || this.state.isCancelingBooking) &&
                     <Backdrop />}
 
-
-
                 {this.state.isCancelingBooking &&
                     <Modal title={this.state.isCancelingBooking.event.title}
                         canCancel="true"
@@ -174,7 +162,6 @@ class BookingsPage extends Component {
                         onConfirm={this.confirmCancelBooking} >
 
                         <div>{this.state.isCancelingBooking.event.description}</div>
-
 
                     </Modal>
                 }
