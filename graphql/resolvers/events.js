@@ -1,61 +1,46 @@
-const Event = require('../../models/event')
-const User = require('../../models/user')
-const {transformEvent} = require ('./merge')
+const Event = require('../../models/event');
+const User = require('../../models/user');
+
+const { transformEvent } = require('./merge');
 
 module.exports = {
+  events: async () => {
+    try {
+      const events = await Event.find();
+      return events.map(event => {
+        return transformEvent(event);
+      });
+    } catch (err) {
+      throw err;
+    }
+  },
+  createEvent: async (args, req) => {
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated!');
+    }
+    const event = new Event({
+      title: args.eventInput.title,
+      description: args.eventInput.description,
+      price: +args.eventInput.price,
+      date: new Date(args.eventInput.date),
+      creator: req.userId
+    });
+    let createdEvent;
+    try {
+      const result = await event.save();
+      createdEvent = transformEvent(result);
+      const creator = await User.findById(req.userId);
 
-    events: () => {
-        return Event.find()
-            .then(events => {
-                return events.map(event => {
-                    return transformEvent(event)
-                })
-            })
-            .catch(err => {
-                console.log(err)
-                throw err
-            })
-    },
+      if (!creator) {
+        throw new Error('User not found.');
+      }
+      creator.createdEvents.push(event);
+      await creator.save();
 
-    createEvent: ({ eventInput }, req) => {
-
-        if (!req.isAuth)
-        {
-            throw Error('AUTH ERROR')
-        }
-
-        let createdEvent
-
-        console.log(req)
-
-        const event = new Event({
-            title: eventInput.title,
-            description: eventInput.description,
-            price: +eventInput.price,
-            date: new Date(eventInput.date),
-            creator: req.userId //'5c47172689144d845c7d2ff8' // temporary hardcoded _id
-        })
-
-        return event
-            .save()
-            .then((result) => {
-                createdEvent = transformEvent(result)
-                return User.findById(req.userId)
-            })
-            .then(user => {
-                if (!user) {
-                    throw new Error('Invalid user id')
-                }
-                user.createdEvents.push(event)
-                return user.save()
-            })
-            .then(() => createdEvent)
-            .catch((err) => {
-                console.log(err)
-                throw err
-            })
-    },
-
-}
-
-
+      return createdEvent;
+    } catch (err) {
+      console.log(err);
+      throw err;
+    }
+  }
+};
